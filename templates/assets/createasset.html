@@ -1,0 +1,194 @@
+{% extends 'starter.html' %}
+{% load static %}
+{% block title %}创建出库单{% endblock %}
+{% block pageheader %}创建出库单{% endblock %}
+{% block Username %}陈耀迪{% endblock %}
+{% block secondpage %}创建出库单{% endblock %}
+{% block isActive4 %}"active"{% endblock %}
+{% block css %}
+    <!-- jvectormap -->
+    <link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/jvectormap/jquery-jvectormap.css' %}">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="{% static 'adminlet-2.4.10/dist/css/skins/_all-skins.min.css' %}">
+    <link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/font-awesome/css/font-awesome.min.css' %}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/Ionicons/css/ionicons.min.css' %}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'adminlet-2.4.10/dist/css/AdminLTE.min.css' %}">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="{% static 'adminlet-2.4.10/dist/css/skins/_all-skins.min.css' %}">
+    <!-- Morris chart -->
+    <link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/morris.js/morris.css' %}">
+    <!-- jvectormap -->
+    <link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/jvectormap/jquery-jvectormap.css' %}">
+    <!-- Date Picker -->
+    <link rel="stylesheet"
+          href="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
+    <!-- Daterange picker -->
+    <link rel="stylesheet"
+          href="{% static 'adminlet-2.4.10/bower_components/bootstrap-daterangepicker/daterangepicker.css' %}">
+    <!-- bootstrap wysihtml5 - text editor -->
+    <link rel="stylesheet"
+          href="{% static 'adminlet-2.4.10/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
+{% endblock %}
+
+{% block content %}
+    <section class="content">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">基础信息</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <form role="form" href="{% url 'outlet' %}">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>出库单编号</label>
+                                <input type="text" class="form-control" placeholder="{{ No }}" id="No-form" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>负责人</label>
+                                <input type="text" class="form-control" name="Na-form" id="Na-form">
+                            </div>
+                            <div class="form-group">
+                                <label>项目名称</label>
+                                <input type="text" class="form-control" name="No-form" id="Po-form">
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+                                <label>创建时间</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-clock-o"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" id="datepicker"
+                                           placeholder="{{ Dt }}" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>借出日期</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="date" class="form-control pull-right " id="datepicker" name="db"/>
+                                </div>
+                                <!-- /.input group -->
+                            </div>
+                            <div class="form-group">
+                                <label>预计归还日期</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="date" class="form-control pull-right" id="datepicker" name="de"/>
+                                </div>
+                                <!-- /.input group -->
+                            </div>
+                            <!-- /.col -->
+                        </div>
+
+                    </div>
+                    <!-- /.row -->
+                    <input type="button" class="btn btn-primary pull-right" id="info"
+                           href="{% url 'outlet' %}" value="提交">
+                </form>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+                请自己检查 <b>基础信息栏</b> 中的信息，该信息在之后将不被允许进行修改，如有疑问您可以在管理员出寻求帮助
+            </div>
+        </div>
+        <!-- /.row -->
+    </section>
+
+{% endblock %}
+
+{% block script %}
+    {#    <script src="{% static 'adminlet-2.4.10/bower_components/ajax/ajax.min.js' %}"></script>#}
+    <!-- FastClick -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/fastclick/lib/fastclick.js' %}"></script>
+    <!-- Sparkline -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js' %}"></script>
+    <!-- jvectormap  -->
+    <script src="{% static 'adminlet-2.4.10/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js' %}"></script>
+    <script src="{% static 'adminlet-2.4.10/plugins/jvectormap/jquery-jvectormap-world-mill-en.js' %}"></script>
+    <!-- SlimScroll -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>
+    <!-- ChartJS -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/chart.js/Chart.js' %}"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="{% static 'adminlet-2.4.10/dist/js/pages/dashboard2.js' %}"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="{% static 'adminlet-2.4.10/dist/js/demo.js' %}"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/jquery-ui/jquery-ui.min.js' %}"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button);
+    </script>
+    <!-- Bootstrap 3.3.7 -->
+    <!-- Morris.js charts -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/raphael/raphael.min.js' %}"></script>
+    <script src="{% static 'adminlet-2.4.10/bower_components/morris.js/morris.min.js' %}"></script>
+    <!-- Sparkline -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js' %}"></script>
+    <!-- jvectormap -->
+    <script src="{% static 'adminlet-2.4.10/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js' %}"></script>
+    <script src="{% static 'adminlet-2.4.10/plugins/jvectormap/jquery-jvectormap-world-mill-en.js' %}"></script>
+    <!-- jQuery Knob Chart -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/jquery-knob/dist/jquery.knob.min.js' %}"></script>
+    <!-- daterangepicker -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'adminlet-2.4.10/bower_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+    <!-- datepicker -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <!-- Bootstrap WYSIHTML5 -->
+    <script src="{% static 'adminlet-2.4.10/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js' %}"></script>
+    <!-- Slimscroll -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>
+    <!-- FastClick -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/fastclick/lib/fastclick.js' %}"></script>
+    <!-- AdminLTE App -->
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="{% static 'adminlet-2.4.10/dist/js/pages/dashboard.js' %}"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="{% static 'adminlet-2.4.10/dist/js/demo.js' %}"></script>
+    <script>
+        {% for msg in messages %}
+            alert('{{ msg.message }}');
+        {% endfor %}
+    </script>
+    <script>
+        $("#info").click(function () {
+            $.ajax({
+                url: "{% url 'outgoing_post' %}",
+                type: "post",
+                data: {
+                    code: '1',
+                    db_j: $("input[name='db']").val(),
+                    de_j: $("input[name='de']").val(),
+                    na_j: $("#Na-form").val(),
+                    po_j: $("#Po-form").val(),
+                    no_j: $("#No-form").attr("placeholder"),
+                    dt_j: $("#datepicker:eq(0)").attr("placeholder"),
+                    csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val(),
+                },
+                success: function (res) {
+                    alert(res['mes']);
+                    window.location.replace("/assetsmanagermini/table/"+res['no']);
+                }
+            });
+        })
+    </script>
+{% endblock %}

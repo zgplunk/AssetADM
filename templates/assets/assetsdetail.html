@@ -1,0 +1,168 @@
+{% extends 'starter.html' %}
+{% load static %}
+{% block title %}资产详情{% endblock %}
+{% block pageheader %}资产详情{% endblock %}
+{% block Username %}陈耀迪{% endblock %}
+{% block secondpage %}资产总表{% endblock %}
+{% block thirdpage %}资产详情{% endblock %}
+{% block isActive2 %}"active"{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'adminlet-2.4.10/dist/css/skins/_all-skins.min.css' %}">
+{% endblock %}
+{% block content %}
+    {% csrf_token %}
+
+    <!-- Main content -->
+    <section class="invoice">
+        <!-- title row -->
+        <div class="row">
+            <div class="col-xs-12">
+                <h2 class="page-header">
+                    <i class="fa fa-archive"></i> {{ asset.Na }}.
+                    <small class="pull-right">Date: 2/10/2014(录入日期)</small>
+                </h2>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- info row -->
+        <div class="row invoice-info">
+            <div class="col-sm-4 invoice-col">
+                <b>规格型号</b>
+                <address>
+                    {{ asset.Mo }}
+                </address>
+                <b>二维码</b>
+                <address>
+                    <a href="" id="barcode">打印</a>
+                </address>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-4 invoice-col">
+                <b>厂家/品牌</b>
+                <address>
+                    {{ asset.Ma }}
+                </address>
+                <b>量程</b>
+                <address>
+                    {{ asset.Ra }}
+                </address>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-4 invoice-col">
+                <b>存放位置</b>
+                <address>
+                    {{ asset.Lo }}
+                </address>
+                <b>备注</b>
+                <address>
+                    {{ asset.Rm }}
+                </address>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-xs-12 table-responsive">
+                <b>相关文件</b>
+                <table id="example1" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>文件名</th>
+                        <th>上传时间</th>
+                        <th>下载</th>
+                    </tr>
+                    </thead>
+
+                    {% if events %}
+                        <tbody>
+                        {% for file in files %}
+                            <tr>
+                                <td>{{ file.id }}</td>
+                                <td>{{ file.Ti }}</td>
+                                <td>{{ file.Dt }}</td>
+                                <td><a href="{% url 'download' file.id %}">下载</a></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    {% else %}
+                        <td align="center" colspan="4">该设备未上传相关文件</td>
+                    {% endif %}
+
+
+                </table>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+        <!-- Table row -->
+        <div class="row">
+            <div class="col-xs-12 table-responsive">
+                <b>借出记录</b>
+                <table id="example1" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>状态</th>
+                        <th>项目</th>
+                        <th>负责人</th>
+                        <th>日期</th>
+                    </tr>
+                    </thead>
+
+                    {% if events %}
+                        <tbody>
+                        {% for event in events %}
+                            <tr>
+                                <td>{{ event.No }}</td>
+                                <td>{{ event.St }}</td>
+                                <td>{{ event.Pr }}</td>
+                                <td>{{ event.Nm }}</td>
+                                <td>{{ event.Dt }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    {% else %}
+                        <td align="center" colspan="5">该设备暂无借出归还记录</td>
+                    {% endif %}
+
+
+                </table>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+
+        <!-- this row will not appear when printing -->
+
+    </section>
+    <!-- /.content -->
+    <div class="clearfix"></div>
+{% endblock %}
+{% block script %}
+    <!-- FastClick -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/fastclick/lib/fastclick.js' %}"></script>
+    <!-- DataTables -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'adminlet-2.4.10/dist/js/demo.js' %}"></script>
+    <script>
+        $("#barcode").click(function () {
+            $.ajax({
+                url: "{% url 'outgoing_post' %}",
+                type: "post",
+                data: {
+                    code: "6",
+                    asset_id: "{{ asset.No }}",
+                    csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val(),
+                },
+                success: function (res) {
+                    alert(res.mes);
+                    window.location.replace("/assetsmanagermini/download/"+res.download_url);
+                }
+            })
+        })
+    </script>
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,201 @@
+{% extends 'starter.html' %}
+{% load static %}
+{% block title %}出库单详情{% endblock %}
+{% block pageheader %}出库单详情{% endblock %}
+{% block Username %}陈耀迪{% endblock %}
+{% block secondpage %}出库记录{% endblock %}
+{% block thirdpage %}出库单详情{% endblock %}
+{% block isActive3 %}"active"{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'adminlet-2.4.10/dist/css/skins/_all-skins.min.css' %}">
+{% endblock %}
+{% block content %}
+    <!-- Main content -->
+    <section class="invoice">
+        <!-- title row -->
+        <div class="row">
+            <div class="col-xs-12">
+                <h2 class="page-header">
+                    <i class="fa fa-server"></i> {{ outgoing.Project }}.
+                    <small class="pull-right">Date: {{ outgoing.Create_time }}</small>
+                </h2>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- info row -->
+        <div class="row invoice-info">
+            <div class="col-sm-4 invoice-col">
+                <b>负责人</b>
+                <address>
+                    {{ outgoing.Name_person }}
+                </address>
+                <b>出库单状态</b>
+                <address>
+                    {{ outgoing.Status }}
+                </address>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-4 invoice-col">
+                <b>出库时间</b>
+                <address>
+                    {{ outgoing.Start_date }}
+                </address>
+                <b>预计归库时间</b>
+                <address>
+                    {{ outgoing.End_date }}
+                </address>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-4 invoice-col">
+                <b>项目编号</b>
+                <address>
+                    {{ outgoing.Number_form }}
+                </address>
+                <b>二维码</b>
+                <address>
+                    <a href="" id="barcode">打印</a>
+                </address>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+        <!-- Table row -->
+        <div class="row">
+            <div class="col-xs-12 table-responsive">
+                <b>借出设备</b>
+                <table id="example1" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>设备名称</th>
+                        <th>规格</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+
+                    {% if assets %}
+                        <tbody>
+                        {% for asset in assets %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ asset.Asset.Na }}</td>
+                                <td>{{ asset.Asset.Mo }}</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <input type="button" class="btn btn-danger remove" id="remove"
+                                               href="" value="删除" asset_id="{{ asset.Asset.No }}"
+                                               {% if outgoing.Status != '进行' %}disabled{% endif %}>
+                                        <input type="button" class="btn btn-success back" id="back"
+                                               href="" value="归还" asset_id="{{ asset.Asset.No }}"
+                                               {% if asset.Asset.St != 1 %}disabled{% endif %}>
+                                    </div>
+                                </td>
+                                {% if asset.Asset.St != 1 %}<td>-已归还</td>{% endif %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    {% else %}
+                        <td align="center" colspan="5">该出库单中尚未添加资产</td>
+                    {% endif %}
+                    <div class="btn-group">
+                        {% csrf_token %}
+                        <input type="button" class="btn btn-danger" id="over"
+                               href="" value="停止/归档" {% if outgoing.Status == '结束' %}disabled{% endif %}>
+                        <input type="button" class="btn btn-warning" id="change"
+                               href="" value="添加/修改" {% if outgoing.Status == '结束' %}disabled{% endif %}>
+                    </div>
+
+                </table>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+
+        <!-- this row will not appear when printing -->
+
+    </section>
+    <!-- /.content -->
+    <div class="clearfix"></div>
+{% endblock %}
+{% block script %}
+    <!-- FastClick -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/fastclick/lib/fastclick.js' %}"></script>
+    <!-- DataTables -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'adminlet-2.4.10/dist/js/demo.js' %}"></script>
+    <script>
+        $(document).on('beforeunload', function () {
+            $.post(url = "{% url 'test' %}", data = {'mes': 1})
+        })
+    </script>
+    <script>
+        $("#over").click(function () {
+            $.ajax({
+                url: "{% url 'outgoing_post' %}",
+                type: "post",
+                data: {
+                    code: '3',
+                    outgoing_id: "{{ outgoing.Number_form }}",
+                    csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val(),
+                },
+                success: function (res) {
+                    alert(res.mes)
+                    window.location.replace("{% url 'outgoing' %}")
+                }
+            });
+        });
+        $("#change").click(function () {
+            window.location.replace("{% url 'add_one_asset' oid=outgoing.Number_form %}")
+        });
+        $(".back").click(function () {
+            $.ajax({
+                url: "{% url 'outgoing_post' %}",
+                type: "post",
+                data: {
+                    code: '4',
+                    asset_id: $(this).attr("asset_id"),
+                    outgoing_id: "{{ outgoing.Number_form }}",
+                    csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val(),
+                },
+                success: function (res) {
+                    alert(res.mes);
+                    window.location.reload();
+                }
+            });
+        });
+        $(".remove").click(function () {
+            $.ajax({
+                url: "{% url 'outgoing_post' %}",
+                type: "post",
+                data: {
+                    code: '5',
+                    asset_id: $(this).attr("asset_id"),
+                    outgoing_id: "{{ outgoing.Number_form }}",
+                    csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val(),
+                },
+                success: function (res) {
+                    alert(res.mes);
+                    window.location.reload();
+                }
+            });
+        });
+        $("#barcode").click(function () {
+            $.ajax({
+                url: "{% url 'outgoing_post' %}",
+                type: "post",
+                data: {
+                    code: "7",
+                    outgoing_id: "{{ outgoing.Number_form }}",
+                    csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val(),
+                },
+                success: function (res) {
+                    alert(res.mes);
+                    window.location.replace("/assetsmanagermini/download/"+res.download_url);
+                }
+            })
+        });
+    </script>
+{% endblock %}
+</body>
+</html>

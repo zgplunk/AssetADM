@@ -1,0 +1,5 @@
+d:
+cd D:\MyPythonPrograms\SignalInterpreterbyPython\.venv311\Scripts
+activate
+cd D:\MyPythonPrograms\IW
+python swm_assembly.py

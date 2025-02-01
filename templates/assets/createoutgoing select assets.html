@@ -1,0 +1,130 @@
+{% extends 'starter.html' %}
+{% load static %}
+{% block title %}资产总表{% endblock %}
+{% block pageheader %}资产总表{% endblock %}
+{% block Username %}陈耀迪{% endblock %}
+{% block secondpage %}资产总表{% endblock %}
+{% block thirdpage %}出库设备选择{% endblock %}
+{% block isActive4 %}"active"{% endblock %}
+{% block css %}
+    <!-- DataTables -->
+    <link rel="stylesheet"
+          href="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+{% endblock %}
+
+{% block content %}
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">正在为 <strong>{{ project }}</strong> 选择出库设备</h3>
+                        <input type="button" class="btn btn-primary pull-right" id="return"
+                               href="" value="返回">
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            {% csrf_token %}
+                            <thead>
+                            <tr>
+                                <th>编号</th>
+                                <th>名称</th>
+                                <th>数量</th>
+                                <th>规格</th>
+                                <th>库房位置</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in itemlist %}
+                                <tr role="row" class="odd">
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.Na }}</td>
+                                    <td>
+                                        {% if item.Co != 'null' %}
+                                            {{ item.Co }}
+                                        {% else %}
+                                            空
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ item.Mo }}</td>
+                                    <td>{{ item.Lo }}</td>
+                                    <td><input class="btn btn-primary addition" type="button" post-value="{{ item.No }}" id="addition" value="添加"
+                                               {% if item.St == 'True' %}disabled{% endif %}></td>
+                                    {% empty %}
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th>编号</th>
+                                <th>名称</th>
+                                <th>数量</th>
+                                <th>借出状态</th>
+                                <th>库房位置</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+{% endblock %}
+
+{% block script %}
+    <!-- DataTables -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+    <!-- SlimScroll -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>
+    <!-- FastClick -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/fastclick/lib/fastclick.js' %}"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="{% static 'adminlet-2.4.10/dist/js/demo.js' %}"></script>
+    <!-- page script -->
+    <script>
+        $(function () {
+            $('#example1').DataTable()
+            $('#example2').DataTable({
+                'paging': true,
+                'lengthChange': false,
+                'searching': false,
+                'ordering': true,
+                'info': true,
+                'autoWidth': false
+            })
+        })
+    </script>
+    <script>
+        $(".addition").click(function () {
+            $.ajax({
+                url: "{% url 'outgoing_post' %}",
+                type: "post",
+                data: {
+                    code: 2,
+                    asset_id: $(this).attr('post-value'),
+                    outgoing_id: "{{ number }}",
+                    csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val(),
+                },
+                success: function (res) {
+                    alert(res.mes);
+                    window.location.reload();
+                }
+            });
+        });
+    </script>
+    <script>
+        $("#return").click(function () {
+            window.location.href = "{% url 'outgoingdetail' oid=number %}"
+        })
+    </script>
+{% endblock %}
