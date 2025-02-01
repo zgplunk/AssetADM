@@ -1,0 +1,124 @@
+{% extends 'old_tpl/base.html' %}
+{% load static %}
+{% block title %}我借到的资产{% endblock %}
+{% block username %} {{ request.session.username }} {% endblock %}
+
+{% block css %}
+    <link rel="stylesheet"
+          href="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+{% endblock %}
+
+{% block breadcrumb %}
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            资产总表
+            <small>assets list</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 主页</a></li>
+            <li class="active">我借的资产</li>
+        </ol>
+    </section>
+{% endblock %}
+
+{% block content %}
+
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">资产总表<small>(不含软件)</small></h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="assets_table" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>设备编号</th>
+                                <th>名称</th>
+                                <th>设备类型</th>
+                                <th>是否借出</th>
+                                <th>业务线</th>
+                                <th>库房位置</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {% for ep in myassests %}
+                                <tr>
+
+                                    <td>{{ ep.Eid }}</td>
+                                    <td>{{ ep.Ename }}</td>
+                                    {% if ep.Etype == '1' %}
+                                        <td class="text-yellow text-bold">传感器</td>
+                                    {% elif ep.Etype == '2' %}
+                                        <td class="text-green text-bold">设备</td>
+                                    {% elif ep.Etype == '3' %}
+                                        <td class="text-red text-bold">耗材</td>
+                                    {% endif %}
+                                    {% if ep.BorrowState == 0 %}
+                                        <td class="text-green text-bold">未借出</td>
+                                    {% elif ep.BorrowState == 1 %}
+                                        <td class="text-green text-bold">已借出</td>
+                                    {% endif %}
+                                    {% if ep.BorrowProj == None %}
+                                        <td class="text-green text-bold">未借出</td>
+                                    {% elif ep.BorrowState != None %}
+                                        <td>{{ ep.BorrowProj }}</td>
+                                    {% endif %}
+                                    <td>{{ ep.Location }}</td>
+                                    <td><a href="{% url 'TestApp01:details' ep.Eid %}">详情</a>
+                                    <a href="{% url 'TestApp01:giveback' ep.Eid %}">归还</a></td>
+                                    {% empty %}
+                                <tr>没有数据！</tr>
+                            {% endfor %}
+                            </tr>
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+
+
+{% endblock %}
+
+
+{% block script %}
+
+    <script src="{% static 'adminlet-2.4.10/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+
+    <script>
+        $(function () {
+            $('#assets_table').DataTable({
+                "paging": true,       <!-- 允许分页 -->
+                "lengthChange": true, <!-- 允许改变每页显示的行数 -->
+                "searching": true,    <!-- 允许内容搜索 -->
+                "ordering": true,     <!-- 允许排序 -->
+                "info": true,         <!-- 显示信息 -->
+                "autoWidth": false    <!-- 固定宽度 -->
+            });
+        });
+
+
+    </script>
+
+    <script>
+        {% for msg in messages %}
+            alert('{{ msg.message }}');
+        {% endfor %}
+    </script>
+{% endblock %}

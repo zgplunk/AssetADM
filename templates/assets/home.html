@@ -1,0 +1,177 @@
+{% extends 'starter.html' %}
+{% load static %}
+{% block title %}首页{% endblock %}
+{% block pageheader %}首页{% endblock %}
+{% block Username %}陈耀迪{% endblock %}
+{% block isActive1 %}"active"{% endblock %}
+{% block css %}
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="{% static 'adminlet-2.4.10/dist/css/skins/_all-skins.min.css' %}">
+    <!-- Morris chart -->
+    <link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/morris.js/morris.css' %}">
+    <!-- jvectormap -->
+    <link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/jvectormap/jquery-jvectormap.css' %}">
+    <!-- Date Picker -->
+    <link rel="stylesheet"
+          href="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
+    <!-- Daterange picker -->
+    <link rel="stylesheet"
+          href="{% static 'adminlet-2.4.10/bower_components/bootstrap-daterangepicker/daterangepicker.css' %}">
+    <!-- bootstrap wysihtml5 - text editor -->
+    <link rel="stylesheet"
+          href="{% static 'adminlet-2.4.10/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css' %}">
+{% endblock %}
+
+{% block content %}
+    <!-- Info boxes -->
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear"></i></span>
+                <div class="info-box-content">
+                    <a href="{% url 'assets' %}">
+                        <span class="info-box-text">资产总数</span>
+                        <span class="info-box-number">{{ aa }}</span>
+                    </a>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
+
+                <div class="info-box-content">
+                    {#                    <a href="{% url 'assets' %}">#}
+                    <span class="info-box-text">出库资产总数</span>
+                    <span class="info-box-number">{{ ao }}</span>
+                    {#                    </a>#}
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+
+        <!-- fix for small devices only -->
+        <div class="clearfix visible-sm-block"></div>
+
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
+
+                <div class="info-box-content">
+                    {#                    <a href="{% url 'assets' %}">#}
+                    <span class="info-box-text">在库资产总数</span>
+                    <span class="info-box-number">{{ ai }}</span>
+                    {#                    </a>#}
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
+                <div class="info-box-content">
+                    <a href="{% url 'outgoing' %}">
+                        <span class="info-box-text">出库单总数</span>
+                        <span class="info-box-number">{{ oa }}</span>
+                    </a>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">最近数据一览表</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>内容</th>
+                            <th>时间</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in eventslist %}
+                            <tr>
+                                <td>{{ item.id }}</td>
+                                <td>{{ item.context }}</td>
+                                <td>{{ item.date }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <!-- FastClick -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/fastclick/lib/fastclick.js' %}"></script>
+    <!-- Sparkline -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js' %}"></script>
+    <!-- jvectormap  -->
+    <script src="{% static 'adminlet-2.4.10/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js' %}"></script>
+    <script src="{% static 'adminlet-2.4.10/plugins/jvectormap/jquery-jvectormap-world-mill-en.js' %}"></script>
+    <!-- SlimScroll -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>
+    <!-- ChartJS -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/chart.js/Chart.js' %}"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="{% static 'adminlet-2.4.10/dist/js/pages/dashboard2.js' %}"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="{% static 'adminlet-2.4.10/dist/js/demo.js' %}"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/jquery-ui/jquery-ui.min.js' %}"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button);
+    </script>
+    <!-- Bootstrap 3.3.7 -->
+    <!-- Morris.js charts -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/raphael/raphael.min.js' %}"></script>
+    <script src="{% static 'adminlet-2.4.10/bower_components/morris.js/morris.min.js' %}"></script>
+    <!-- Sparkline -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js' %}"></script>
+    <!-- jvectormap -->
+    <script src="{% static 'adminlet-2.4.10/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js' %}"></script>
+    <script src="{% static 'adminlet-2.4.10/plugins/jvectormap/jquery-jvectormap-world-mill-en.js' %}"></script>
+    <!-- jQuery Knob Chart -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/jquery-knob/dist/jquery.knob.min.js' %}"></script>
+    <!-- daterangepicker -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'adminlet-2.4.10/bower_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+    <!-- datepicker -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <!-- Bootstrap WYSIHTML5 -->
+    <script src="{% static 'adminlet-2.4.10/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js' %}"></script>
+    <!-- Slimscroll -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>
+    <!-- FastClick -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/fastclick/lib/fastclick.js' %}"></script>
+    <!-- AdminLTE App -->
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="{% static 'adminlet-2.4.10/dist/js/pages/dashboard.js' %}"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="{% static 'adminlet-2.4.10/dist/js/demo.js' %}"></script>
+{% endblock %}

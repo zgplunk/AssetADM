@@ -1,0 +1,108 @@
+{% extends 'starter.html' %}
+{% load static %}
+{% block title %}出库记录{% endblock %}
+{% block pageheader %}出库记录{% endblock %}
+{% block Username %}陈耀迪{% endblock %}
+{% block secondpage %}出库记录{% endblock %}
+{% block isActive3 %}"active"{% endblock %}
+
+{% block css %}
+    <!-- DataTables -->
+    <link rel="stylesheet"
+          href="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+{% endblock %}
+
+{% block content %}
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">全部出库记录</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>编号</th>
+                                <th>项目名称</th>
+                                <th>负责人</th>
+                                <th>状态</th>
+                                <th>出库时间</th>
+                                <th>预计归库时间</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in itemlist %}
+                                <tr role="row" class="odd">
+                                    <td>{{ item.Number_form }}</td>
+                                    <td><a href="{% url 'outgoingdetailinfo' oid=item.Number_form %}">{{ item.Project }}</a>
+                                    </td>
+                                    <td>{{ item.Name_person }}</td>
+                                    <td>
+                                        {% if item.Status == '进行' %}
+                                            <span class="label label-success">{{ item.Status }}</span>
+                                        {% elif item.Status == '结束' %}
+                                            <span class="label label-danger">{{ item.Status }}</span>
+                                        {% else %}
+                                            <span class="label label-default">{{ item.Status }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ item.Start_date }}</td>
+                                    <td>{{ item.End_date }}</td>
+                                    <td></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th>编号</th>
+                                <th>项目名称</th>
+                                <th>负责人</th>
+                                <th>状态</th>
+                                <th>出库时间</th>
+                                <th>预计归库时间</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+{% endblock %}
+
+{% block script %}
+    <!-- DataTables -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+    <!-- SlimScroll -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>
+    <!-- FastClick -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/fastclick/lib/fastclick.js' %}"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="{% static 'adminlet-2.4.10/dist/js/demo.js' %}"></script>
+    <!-- page script -->
+    <script>
+        $(function () {
+            $('#example1').DataTable()
+            $('#example2').DataTable({
+                'paging': true,
+                'lengthChange': false,
+                'searching': false,
+                'ordering': true,
+                'info': true,
+                'autoWidth': false
+            })
+        })
+    </script>
+
+{% endblock %}

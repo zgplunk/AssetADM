@@ -1,0 +1,105 @@
+{% extends 'starter.html' %}
+{% load static %}
+{% block title %}资产总表{% endblock %}
+{% block pageheader %}资产总表{% endblock %}
+{% block Username %}陈耀迪{% endblock %}
+{% block secondpage %}资产总表{% endblock %}
+{% block isActive2 %}"active"{% endblock %}
+{% block css %}
+    <!-- DataTables -->
+    <link rel="stylesheet"
+          href="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+{% endblock %}
+
+{% block content %}
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">部门全部资产查询表</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>编号</th>
+                                <th>名称</th>
+                                <th>数量</th>
+                                <th>借出状态</th>
+                                <th>库房位置</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in itemlist %}
+                                <tr role="row" class="odd">
+                                    <td>{{ item.id }}</td>
+                                    <td><a href="{% url 'assetdetailinfo' aid=item.No %}">{{ item.Na }}</a></td>
+                                    <td>
+                                        {% if item.Co != 'null' %}
+                                            {{ item.Co }}
+                                        {% else %}
+                                            空
+                                        {% endif %}
+                                    </td>
+                                    {% if item.St %}
+                                        <td>已借出</td>
+                                    {% elif not item.St %}
+                                        <td>未借出</td>
+                                    {% endif %}
+                                    <td>{{ item.Lo }}</td>
+                                    {% empty %}
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th>编号</th>
+                                <th>名称</th>
+                                <th>数量</th>
+                                <th>借出状态</th>
+                                <th>库房位置</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+{% endblock %}
+
+{% block script %}
+    <!-- DataTables -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+    <!-- SlimScroll -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>
+    <!-- FastClick -->
+    <script src="{% static 'adminlet-2.4.10/bower_components/fastclick/lib/fastclick.js' %}"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="{% static 'adminlet-2.4.10/dist/js/demo.js' %}"></script>
+    <!-- page script -->
+    <script>
+        $(function () {
+            $('#example1').DataTable()
+            $('#example2').DataTable({
+                'paging': true,
+                'lengthChange': false,
+                'searching': false,
+                'ordering': true,
+                'info': true,
+                'autoWidth': false
+            })
+        })
+    </script>
+
+{% endblock %}

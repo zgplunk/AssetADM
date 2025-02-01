@@ -1,0 +1,89 @@
+{% extends 'old_tpl/base.html' %}
+{% load static %}
+{% block title %}资产详细{% endblock %}
+{% block username %} {{ request.session.username }} {% endblock %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block breadcrumb %}
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            资产详细
+            <small>asset info</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i>主页</a></li>
+            <li><a href="{% url 'TestApp01:home' %}"><i class="fa fa-dashboard"></i>资产总表</a></li>
+            <li class="active">资产详细</li>
+        </ol>
+    </section>
+{% endblock %}
+
+{% block content %}
+
+    <!-- Main content -->
+    <section class="content">
+
+        <!-- Default box -->
+        <div class="box">
+
+
+            <div class="box-body">
+
+                <form action="{% url 'TestApp01:borrow' assets.Eid %}" method="post">
+                    {% csrf_token %}
+                    <fieldset>
+                        <legend><h1>{{ assets.Ename }}</h1></legend>
+                        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+                        <h4>设备名称</h4><input type="text" value="{{ assets.Ename }}" name="Ename" disabled>
+                        <h4>设备类型</h4>
+                        {% if assets.Etype == '1' %}
+                            <input type="radio" id="Etype" name="Etype" value="1" checked disabled><i>传感器</i>
+                            <input type="radio" id="Etype" name="Etype" value="2" disabled><i>设备</i>
+                            <input type="radio" id="Etype" name="Etype" value="3" disabled><i>耗材</i>
+                        {% elif assets.Etype == '2' %}
+                            <input type="radio" id="Etype" name="Etype" value="1" disabled><i>传感器</i>
+                            <input type="radio" id="Etype" name="Etype" value="2" checked disabled><i>设备</i>
+                            <input type="radio" id="Etype" name="Etype" value="3" disabled><i>耗材</i>
+                        {% elif assets.Etype == '3' %}
+                            <input type="radio" id="Etype" name="Etype" value="1" disabled><i>传感器</i>
+                            <input type="radio" id="Etype" name="Etype" value="2" disabled><i>设备</i>
+                            <input type="radio" id="Etype" name="Etype" value="3" checked disabled><i>耗材</i>
+                        {% else %}
+                            <input type="radio" id="Etype" name="Etype" value="1" disabled><i>传感器</i>
+                            <input type="radio" id="Etype" name="Etype" value="2" disabled><i>设备</i>
+                            <input type="radio" id="Etype" name="Etype" value="3" disabled><i>耗材</i>
+                        {% endif %}
+                        <h4>资产编号</h4><input type="text" value="{{ assets.Eid }}" name="Eid" disabled>
+                        <h4>库房位置</h4><input type="text" value="{{ assets.Location }}" name="Location" disabled>
+                        <h4>借出人</h4><input type="text" value="{{ request.session.username }}" name="BorrowPern"
+                                              disabled>
+                        <h4>业务线</h4><input type="text" name="BorrowProj">
+                        <h4>借出时间</h4><input type="date" name="BorrowTime" id="BorrowTime">
+                    </fieldset>
+                    <h4></h4><input type="submit" value="提交">
+                </form>
+
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+            </div>
+            <!-- /.box-footer-->
+        </div>
+        <!-- /.box -->
+
+    </section>
+    <!-- /.content -->
+
+{% endblock %}
+
+{% block script %}
+    <script>
+        {% for msg in messages %}
+            alert('{{ msg.message }}');
+        {% endfor %}
+    </script>
+{% endblock %}
