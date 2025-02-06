@@ -10,7 +10,6 @@ import datetime
 from spire.barcode import *
 import qrcode
 
-
 # Create your views here.
 
 '''本站域名'''
@@ -27,6 +26,7 @@ root_url = "http://localhost:8000/assetsmanagermini/home/"
     目前二维码实现逻辑：
         前端——（请求{设备ID}）——>服务器（实时生成二维码）——（响应{二维码}）——>前端
 '''
+
 
 def msg_success(code, msg, *args, **kwargs):
     '''
@@ -212,22 +212,23 @@ def outgoing_post(request):
         elif request.POST.get('code') == '6':
             '''请求生成物资二维码'''
             metch_asset = Assets.objects.get(No=request.POST.get('asset_id'))
-            barcode_genor(data={
-                'item_id':metch_asset.No,
-                'asset_name':metch_asset.Na,
-                'website_url':root_url,
+            file = barcode_genor(data={
+                'item_id': metch_asset.No,
+                'asset_name': metch_asset.Na,
+                'website_url': root_url,
                 'asset_model': metch_asset.Mo,
-                'asset_Location':metch_asset.Lo,
-                })
+                'asset_Location': metch_asset.Lo,
+            })
+            print('ok-6')
             return JsonResponse({
                 'code': '1',
                 'mes': f'二维码生成完毕，点击确定开始下载:{metch_asset.No}',
-                'download_url': f"{metch_asset.No}-A"
+                'download_url': file
             })
         elif request.POST.get('code') == '7':
             '''请求生成出库单二维码'''
             metch_table = Tables.objects.get(Number_form=request.POST.get('outgoing_id'))
-            barcode_genor(data={
+            file = barcode_genor(data={
                 'item_id': metch_table.Number_form,
                 'table_title': metch_table.Project,
                 'website_url': root_url,
@@ -238,7 +239,7 @@ def outgoing_post(request):
             return JsonResponse({
                 'code': '1',
                 'mes': f'二维码生成完毕，点击确定开始下载:{metch_table.Number_form}',
-                'download_url': f"{metch_table.Number_form}-T"
+                'download_url': file
             })
 
     if request.method == 'GET':
@@ -247,4 +248,6 @@ def outgoing_post(request):
 
 def barcode_genor(data):
     img = qrcode.make(data)
-    img.save(f"{data['item_id']}_temp_QRcode.png")
+    img_file_title = f"{data['item_id']}_temp_QRcode_{datetime.datetime.now().strftime('%d_%m_%Y_%H_%M_%S')}.png"
+    img.save(img_file_title)
+    return img_file_title

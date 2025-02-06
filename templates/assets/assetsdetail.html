@@ -33,7 +33,7 @@
                 </address>
                 <b>二维码</b>
                 <address>
-                    <a href="" id="barcode">打印</a>
+                    <a href="" id="barcode" type="button">打印</a>
                 </address>
             </div>
             <!-- /.col -->
@@ -157,12 +157,11 @@
                     csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val(),
                 },
                 success: function (res) {
+                    console.log(res.mes)
+                    console.log(1)
                     alert(res.mes);
-                    window.location.replace("/assetsmanagermini/download/"+res.download_url);
                 }
             })
         })
     </script>
 {% endblock %}
-</body>
-</html>
